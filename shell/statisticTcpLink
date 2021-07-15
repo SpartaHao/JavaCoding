@@ -1,0 +1,10 @@
+#!/bin/bash
+#统计tcp链接
+  
+home="/opt/devops"
+curTime=$(date "+%Y-%m-%d %H:%M:%S")
+total=`netstat -n | grep tcp | wc -l`
+echo "current time: "$curTime>>${home}/result.txt
+echo "total tcp num: "$total>>${home}/result.txt
+echo ` netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a,S[a]}'`>>${home}/result.txt
+echo "">>${home}/result.txt
