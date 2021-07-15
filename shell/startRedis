@@ -1,0 +1,43 @@
+#同时起多个redis节点，以集群的方式部署
+#! /bin/bash
+
+path=$(cd $(dirname $0); pwd)
+confs=$(ls | grep node)
+if [ "x${confs}" == "x" ];then
+    echo "not found any node."
+    exit 1
+fi
+
+index=""
+conf=""
+local_IP=$(ip addr show eth0 | grep -w inet | awk '{print $2}' | awk -F'/' '{print $1}')
+passwd=123456
+server_list=""
+
+for i in ${confs}
+do
+    cd ${path}/$i
+    echo "start redis-server ${i}..."
+    if [ ! -f redis.conf ];then
+        echo "not found redis.conf in ${i}."
+        continue
+    fi
+    rm -rf nodes.conf
+    rm -rf dump.rdb
+    ${path}/bin/redis-server redis.conf
+    if [ $? = 0 ];then
+        server_list=$(echo ${server_list} ${local_IP}:${i##*_})
+    else
+        echo "start redis-server ${i} failed."
+    fi
+done
+
+expect <<EOF
+    set timeout 10
+    spawn ${path}/bin/redis-cli -a ${passwd} --cluster create ${server_list}
+    expect {
+        "type 'yes' to accept" { send "yes\n"; exp_continue }
+    }
+EOF
+
+echo "start redis cluster end."
