@@ -1,0 +1,42 @@
+	1. 统计文本行数
+	wc -l test1.sh
+	
+	cat test1.sh |wc -l
+	
+	sed -n '$=' test1.sh
+	
+	来自 <https://blog.csdn.net/suiqiji206/article/details/50546275/> 
+	
+	2. 删除重复行
+	sort te.txt |uniq
+	
+	sort te.txt | awk '{if($0!=pro){print $0;pro=$0}}'
+	
+	来自 <https://blog.csdn.net/weihongrao/article/details/12851071> 
+	
+	3. 格式化输出
+	awk '{printf "%-8s %-10s\n",$1,$4}' log.txt
+	
+	来自 <https://www.runoob.com/linux/linux-comm-awk.html> 
+	shell printf命令：格式化输出语句
+	
+	来自 <https://www.cnblogs.com/yang-hao/p/5969218.html> 
+	
+	
+	4. 自增的写法
+	echo $((n++))
+	echo $n
+	
+	5. 删掉第一行，并且第二例数值累加
+	#sed '1d' ./count.txt | awk '{total+=$2} END{print total}'
+	6. 查看有多少列（空格作为分隔符）
+	cat count.txt | awk '{print NF}'
+	7. linux 下 shell命令 执行结果赋值给变量【两种方式】
+	方法1、find命令 模糊查询在/apps/swapping目录下 查找 文件名中包含swapping并且以.jar结尾的文件
+	使用反引号 引住命令，然后使用变量接收
+	var=` find /apps/swapping -name '*swapping*.jar' `
+	
+	方法2：使用$(命令)的方式赋值给变量
+	SOURCE_JAR_PATH=$(find "$SOURCE_PATH/$SERVER_NAME/target/"  -name "*$SERVER_NAME*.jar" )
+	8. 去除第一列重复的行:
+	cat result.txt | awk '!a[$1]++{print}'
