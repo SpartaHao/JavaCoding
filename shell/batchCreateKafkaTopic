@@ -1,0 +1,12 @@
+#!/bin/bash
+#批量创建kafka topic
+
+base_dir="/**"
+kafka_dir="/**/kafka_2.11/bin"
+for line in `cat $base_dir/topics.txt`
+        do
+            sh $kafka_dir/kafka-topics.sh --create --zookeeper **:12181,1**:12181,**:12181 --replication-factor 3 --partitions 2 --topic ${line}
+        done
+echo "topic列表如下:"
+
+sh $base_dir/kafka-topics.sh --zookeeper **:12181 --list
