@@ -1,0 +1,72 @@
+查看kafka topic列表：
+./kafka-topics.sh --zookeeper 127.0.0.1:12181 --list
+
+查看每个topic的详细信息：
+./kafka-topics.sh --zookeeper 127.0.0.1:12181 --describe --topic testKafka
+
+ 创建topic：
+./bin/kafka-topics.sh --create --zookeeper 127.0.0.1:12181 --replication-factor 5 --partitions 5 --topic topic_name
+
+删除topic:
+./kafka-topics.sh --zookeeper 127.0.0.1:12181 --delete --topic testKafka
+  
+
+查看当前消费者组的消费情况
+./kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --describe --group test-group
+
+
+查看kafka topic的offset的范围
+ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list 127.0.0.1:9092 --topic ticc.submittmssresult  --time -2
+
+查看kafka的信息保存
+./kafka-run-class.sh kafka.tools.DumpLogSegments --files /**/kafka/ticc.exceptionhandler-2/0000000000000000009.log  --print-data-log  >/data/group.txt
+
+查看当前topic消费到哪个offset值
+./kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zookeeper 127.0.0.1:12181 --group ticc.sendtc-group --topic ticc.sendtc
+
+查看当前topic消费情况
+/kafka-topics.sh --describe --topic *** --zookeeper 127.0.0.1:12181
+
+查看消费者组下某topic消费情况
+./kafka-run-class.sh kafka.tools.ConsumerOffsetChecker --zookeeper 10.21.135.155:12181 --group test-group --topic test-topic
+
+
+查看topic列表：
+sh /**/kafka_2.11-0.10.1.1/bin/kafka-topics.sh --zookeeper 127.0.0.1:12181 --list
+
+查看消费者组列表：
+./kafka-consumer-groups.sh --bootstrap-server 127.0.0.1:9092 --list
+
+查看消费者组具体的消费者
+./kafka-consumer-groups.sh --new-consumer --bootstrap-server 127.0.0.1:9092 --describe --group test-group
+
+拉取消息到最新：
+./kafka-run-class.sh kafka.tools.UpdateOffsetsInZK latest consumer.properties topic
+
+kafka扩展partition
+./kafka-topics.sh --alter --topic topic1 --zookeeper zkip:2181 --partitions 6 
+
+更改topic对应的副本因子：reassign.json不能有其他无用字符，如注释
+./kafka-reassign-partitions.sh --zookeeper 127.0.0.1:12181 --reassignment-json-file reassign.json --execute
+
+
+查看日志
+[root@node1 kafka_2.10-0.8.2.1]# bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /tmp/kafka-logs/msg_format_v0-0/00000000000000000000.log
+Dumping /tmp/kafka-logs-08/msg_format_v0-0/00000000000000000000.log
+Starting offset: 0
+offset: 0 position: 0 isvalid: true payloadsize: 5 magic: 0 compresscodec: NoCompressionCodec crc: 592888119 keysize: 3
+
+
+kafka重启：（kafka和zookeeper一样，如果partition有多个分区的话可以一台一台重启）
+bin/kafka-server-start.sh -daemon config/server.properties
+
+有多个副本，所以重启一个节点是ok的，可能会导致当时消费异常，但是重启完成后整个kafka集群是可以正常工作的，不会丢消息。是否有影响，主要看设置
+副本数 （影响发送和消费）， topic的最小同步数（影响发送），__offset__consumer的复制数（影响消费），topic的最小同步数（影响发送），__offset__consumer的复制数（影响消费）
+
+
+kafka关闭：bin/kafka-server-stop.sh（优雅关闭，其实也是使用的kill指令，不过是kill -15）
+注意：不要使用kill -9，强杀kafka会导致在内存的数据没有及时刷盘导致消息丢失，然后重建索引，如果分区较多消息量很大，会非常慢
+
+
+kafka优雅关闭：
+https://www.jianshu.com/p/6f7c4cf44782
