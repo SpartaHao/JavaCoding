@@ -1,0 +1,27 @@
+数据库授权：
+grant ALL on `database1`.* to 'user'@'127.%' identified by 'pwd';
+
+数据库取消授权：如果之前有授权，重新授权别的密码的话，会导致数据连不上，此时就要revoke取消授权
+revoke all on *.* from 'user'@'127.%';
+
+如果对具体的ip授权了，和'10.%'不是一个意思，也要取消具体的IP
+revoke ALL ON *.* from 'user'@'127.0.0.1'
+
+revoke之后是USER权限，默认的，要想删除的话得用DROP USER：
+DROP USER 'user@127.0.0.1';
+
+查看数据库权限：
+show grants for 'user'@'10.%';
+
+授权完后要flush一下：
+flush privileges;
+
+ 
+zk节点权限授权：
+addauth digest user:pwd
+
+
+curl：
+GET: curl -H "requestId: 0123456789" -H "Content-Type: application/json;charset=UTF-8" -H "Accept: application/json" -X GET -k  'http://127.0.0.1:8080/test'
+
+POST：curl -H "requestID: 0123456789" -H "tenantid: user1" -H "Content-Type: application/json;charset=UTF-8" -H "Accept: application/json" -X POST -d '{"name":"wh","id":"4075439629569359872"}' -k  'http://127.0.0.1:8080/test'
