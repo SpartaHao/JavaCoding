@@ -16,6 +16,22 @@ show grants for 'user'@'10.%';
 授权完后要flush一下：
 flush privileges;
 
+修改表名：
+alter table table1 rename as table1_bak;
+alter table table1 rename to table1_bak;
+
+创建表：
+create table table1  like  table2;
+或者先用show create table table1;查询表结构，然后在使用建表语句创建表
+
+修改库名：
+当前没有直接修改库名的语句，一般有以下几种方案：
+1、修改该库下所有的表名，然后在创建空表
+2、mysqldump，然后导入到另外一个库，drop掉当前库后在新建一个库
+3、直接创建个新库，然后修改mysql连接串
+
+linux安装mysql：
+yum -y install mariadb
  
 zk节点权限授权：
 addauth digest user:pwd
