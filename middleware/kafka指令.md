@@ -57,10 +57,13 @@ bin/kafka-console-consumer.sh --zookeeper 127.0.0.1:2181 --from-beginning --topi
 
 
 查看日志
-[root@node1 kafka_2.10-0.8.2.1]# bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /tmp/kafka-logs/msg_format_v0-0/00000000000000000000.log
+./kafka-run-class.sh kafka.tools.DumpLogSegments --files /tmp/kafka-logs/msg_format_v0-0/00000000000000000000.log
 Dumping /tmp/kafka-logs-08/msg_format_v0-0/00000000000000000000.log
 Starting offset: 0
 offset: 0 position: 0 isvalid: true payloadsize: 5 magic: 0 compresscodec: NoCompressionCodec crc: 592888119 keysize: 3
+
+查看具体的消息内容
+./kafka-run-class.sh kafka.tools.DumpLogSegments --files /tmp/kafka-logs/test3-0/00000000000000000000.log  **--print-data-log**
 
 
 kafka重启：（kafka和zookeeper一样，如果partition有多个分区的话可以一台一台重启）
