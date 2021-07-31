@@ -49,6 +49,12 @@ kafka扩展partition
 更改topic对应的副本因子：reassign.json不能有其他无用字符，如注释
 ./kafka-reassign-partitions.sh --zookeeper 127.0.0.1:12181 --reassignment-json-file reassign.json --execute
 
+生产者发送消息
+ bin/kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic topic2
+ 
+消费者消费消息
+bin/kafka-console-consumer.sh --zookeeper 127.0.0.1:2181 --from-beginning --topic topic2
+
 
 查看日志
 [root@node1 kafka_2.10-0.8.2.1]# bin/kafka-run-class.sh kafka.tools.DumpLogSegments --files /tmp/kafka-logs/msg_format_v0-0/00000000000000000000.log
