@@ -1,5 +1,8 @@
 策略模式，汇总map的两种实现方式：
 ## 1、通过ApplicationContextAware的setApplicationContext方法设置上下文
+使用Spring的getBeansOfType实现接口多实现类的动态调用  
+https://blog.csdn.net/u012501054/article/details/103927674/
+
 ````javascript
 // 这种就是利用spring的一些特性，在初始化之前自动将所有的实现类加载到map里，比较优雅
 @Component
